@@ -1,0 +1,14 @@
+{
+  "name": "cadastro",
+  "version": "1.0.0",
+  "description": "Projeto Cadastro em Java",
+  "scripts": {
+    "build": "mvn clean install",
+    "test": "mvn test"
+  },
+  "author": "Seu Nome",
+  "license": "MIT",
+  "dependencies": {
+    // Adicione aqui as dependências do Node.js, caso seu projeto tenha alguma
+  }
+}

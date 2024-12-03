@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  app:
+    image: cadastro-app:latest  # Nome da imagem do aplicativo Spring Boot
+    container_name: cadastro-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"  # Porta exposta para acessar a aplicação
+    environment:
+      # Configurações para o MySQL
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/bdgaleria  # Nome do serviço MySQL no Docker Compose
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ""
+      # Configurações para o RabbitMQ
+      SPRING_RABBITMQ_HOST: rabbitmq  # Nome do serviço RabbitMQ no Docker Compose
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: admin
+      SPRING_RABBITMQ_PASSWORD: admin123
+    depends_on:
+      - mysql  # Aguarda o MySQL estar disponível
+      - rabbitmq  # Aguarda o RabbitMQ estar disponível
+    restart: always  # Reinicia automaticamente o contêiner em caso de falha
+
+  mysql:
+    container_name: mysql
+    image: mysql:8.0
+    ports:
+      - "3306:3306"  # Porta exposta para conexões externas
+    environment:
+        MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+        MYSQL_DATABASE: bdgaleria
+        MYSQL_USER: mysql_user
+        MYSQL_PASSWORD: mysql_password
+    volumes:
+      - mysql_data:/var/lib/mysql  # Persistência de dados
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: always  # Reinicia automaticamente o contêiner em caso de falha
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management
+    ports:
+      - "15672:15672"  # Painel de controle do RabbitMQ
+      - "5672:5672"    # Porta de comunicação do RabbitMQ
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin123
+    restart: always  # Reinicia automaticamente o contêiner em caso de falha
+
+volumes:
+  mysql_data:  # Volume para o banco de dados
