@@ -9,6 +9,4 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"  # Porta exposta para acessar a aplicação
-    depends_on:
-      - rabbitmq  # Aguarda o RabbitMQ estar disponível
     restart: always  # Reinicia automaticamente o contêiner em caso de falha
