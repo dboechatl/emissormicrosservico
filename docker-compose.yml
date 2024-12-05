@@ -11,20 +11,21 @@ services:
       - "3000:3000"  # Porta exposta para acessar a aplicação
     environment:
       # Configurações para o RabbitMQ
-      SPRING_RABBITMQ_HOST: rabbitmq1  # Nome do serviço RabbitMQ no Docker Compose
+      SPRING_RABBITMQ_HOST: rabbitmq  # Nome do serviço RabbitMQ no Docker Compose
       SPRING_RABBITMQ_PORT: 5672
       SPRING_RABBITMQ_USERNAME: admin
       SPRING_RABBITMQ_PASSWORD: admin123
     depends_on:
-      - rabbitmq1  # Aguarda o RabbitMQ estar disponível
+      - rabbitmq  # Aguarda o RabbitMQ estar disponível
     restart: always  # Reinicia automaticamente o contêiner em caso de falha
 
   rabbitmq:
-    container_name: rabbitmq1
+    container_name: rabbitmq
     image: rabbitmq:3-management
     ports:
-      - "15671:15671"  # Painel de controle do RabbitMQ
-      - "5671:5671"    # Porta de comunicação do RabbitMQ
+      - "15672:15672"  # Painel de controle do RabbitMQ
+      - "5672:5672"    # Porta de comunicação do RabbitMQ
     environment:
       RABBITMQ_DEFAULT_USER: admin
       RABBITMQ_DEFAULT_PASS: admin123
+    restart: always  # Reinicia automaticamente o contêiner em caso de falha
